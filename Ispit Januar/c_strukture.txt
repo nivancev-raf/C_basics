@@ -1,0 +1,145 @@
+STRUKTURE SA POKAZIVACIMA:
+
+Student *student_pok;
+
+- mozemo dodeliti adresu neke promeniljive tipa (Student) pokazivacu:
+Student s1;
+student_pok = &s1;
+
+- strukturi preko pokazivaca pristupamo tako sto koristimo (->)
+student_pok -> ime
+moze i: (*student_pok).ime    ali se redje koristi
+
+/*
+levo od tacke je "tu", desno od tacno . uzimamo iz struct;
+
+-> pristupamo elementima strukture kad radimo sa POKAZIVACIMA
+. pristupamo elementima strukture bez pokazivaca
+
+KAD GOD PRAVIMO NOVU PROMENLJIVU POVEZANU SA STRUKTUROM KOJA IMA POKAZIVAC
+ZA TU PROMENLJIVU MORAMO DA ALOCIRAMO MEMORIJU DINAMICKI(malloc, calloc).
+
+*/
+------------------------------------------------------------------
+
+STRUKTURE I NIZOVI:
+
+Student studenti[10];
+
+- mozemo dodeliti nesto prvom elementu niza ovako:
+strcpy(studenti[0].ime, "Petar");
+
+- na ovaj nacin mozemo isto uraditi samo uz pomoc pokazivaca:
+ovde dodeljujemo vrednost drugom elementu niza
+strcpy((studenti+1)->ime, "Milica");
+
+------------------------------------------------------------------
+
+RAD SA FAJLOVIMA
+
+Za rad sa fajlovima u C-u koriste se pokazivači. 
+Fajl je predstavljen posebnim pokazivačem na sledeći način:
+
+FILE * fp;
+
+Otvaranje fajla:
+FILE * fopen(char *fname, char*mode) 
+primer: 
+FILE* fp = fopen("testfajl.txt", "r");
+****vraca NULL ako fajl ne moze da se otvori*****
+
+fp = fopen("temp/proba.txt", "w"); - relativna putanja koja počinje od tekućeg foldera,
+fp = fopen("D:/temp/proba.txt", "w"); - apsolutna putanja.
+modovi:
+r - read;
+w - write; (ako fajl poostoji brise sve, ako ne postoji pravi novi)
+a - add;
+r+ - read & write;
+w+ - read & write; (ako fajl poostoji brise sve, ako ne postoji pravi novi)
+a+ - read & write; (citanje od pocetka, pisanje se nastavlja na kraj)
+
+------------------------------------------------------------------
+
+ZATVARANJE DOKUMENTA:
+int fclose(FILE *fp ); 
+
+------------------------------------------------------------------
+
+PISANJE U FAJL:
+
+FILE *fp
+fputc('a', fp); - upisuje karakter u fajl,
+fputs("string", fp); - upisuje string u fajl,
+        // EXIT_FAILURE
+        exit(1);
+        // EXIT_SUCCESS
+        exit(0);
+
+------------------------------------------------------------------
+
+CITANJE IZ FIJLA:
+
+fgetc(FILE *fp); -> cita jedan karakter iz fajla
+char *fgets(char *buf, int n, FILE *fp); - čita do n-1 znakova iz fajla
+fscanf(fp, "%s", buff) -> cita string do space
+
+------------------------------------------------------------------
+
+STATICKE STRUKTURE PODATAKA:
+
+To su fiksne velicine (npr: int n = 5), upravljanje memorijom se radi 
+automatski od strane procesora, bez naseg uticaja
+
+------------------------------------------------------------------
+
+DINAMICKE STRUKTURE PODATAKA:
+
+Za razliku od statickih, dinamicke strukture podataka mogu menjati 
+velicinu u toku izvrsavanja programa i najcesce se koriste tacno 
+onoliko memorije koliko je potrebno.
+Njih koristimo kada ne znamo unapred sa kolikom kolicinom podataka cemo raditi.
+
+U C-u postoje četiri ugrađane funkcije iz biblioteke 
+stdlib.h koje omogućavaju dinamičko upravljanje memorijom:
+
+**malloc (memory allocation) -> alocira zadati broj bajtova
+int *ptr;
+int n; -> number of elements for the array
+ptr = (int*)malloc(n * sizeof(int));
+if (ptr == NULL) -> memory not allocated, exit
+
+**calloc (contiguous[susedna] allocation) -> alocira odredjeni broj bajtova i popunjava ih nulama
+ptr = (float*) calloc(25, sizeof(float));
+// 25 je broj elemenata
+
+**realloc -> Veličinu niza možemo da povećamo korišćenjem funkcije realloc.
+array = realloc(array, 20 * sizeof(int));
+
+**free(array) -> oslobađamo zauzetu memoriju
+
+Ukoliko ove funkcije ne uspeju da izvrše alokaciju memorije, vraća se NULL pokazivač. 
+
+------------------------------------------------------------------
+
+JEDNOSTRUKO POVEZANA LISTA:
+
+glava liste == prvi element liste
+Svaki element liste sadrzi pokazivac na sledeci element liste
+Kod poslednjeg elementa liste vrednost pokazaviča na sledeći element je NULL.
+
+typedef struct Element {
+	int podatak;
+	struct Element *sledeci;
+}Element;
+
+Kod funkcije za dodavanje elementa jedan argument je lista, 
+a drugi element koji se dodaje je ili vec alociran element ili neki podatak.
+Ako prosleđujemo samo podatak potrebno je u funkciji alocirati memoriju za novi element liste.
+
+Element* dodajNaPocetak(Element *glava, int broj){
+    Element *novi = (Element*)malloc(sizeof(Element)); // uzimamo memorijski prostor za taj element
+    novi->podatak = broj; // "novi" na mestu "podatak" je doneta vrednost "broj"
+    novi->sledeci = glava; // "novi" na mestu "sledeci" je doneta vrednost "glava"
+    glava = novi; // novi sada postaje glava i tako smo ubacili element ispred svih drugih
+    return glava;
+}
