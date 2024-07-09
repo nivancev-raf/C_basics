@@ -4,9 +4,9 @@
 This repository contains a collection of solved C programming problems, providing a comprehensive resource for beginners to learn and practice C programming.
 
 ## Contents
-- **I kolokvijum**: First midterm problems and solutions.
-- **II kolokvijum**: Second midterm problems and solutions.
-- **Ispit Januar**: January exam problems and solutions.
+- **I kolokvijum**: First midterm problems and solutions. Topics: loops, functions, string manipulation.
+- **II kolokvijum**: Second midterm problems and solutions. Topics: arrays, pointers, recursion.
+- **Ispit Januar**: January exam problems and solutions. Topics: file I/O, dynamic memory, linked lists.
 - **petlja**: solved problems from - https://petlja.org/sr-Latn-RS/biblioteka/r/kursevi/uvod-u-programiranje
 
 ## How to Use
